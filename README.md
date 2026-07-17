@@ -15,3 +15,4 @@ Phase 1 (hackathon): loop state machine + Callaway-RTA silicon engine + gate set
 1. **Validate** — rediscovery benchmark (silicon κ(T), Glassbrenner–Slack ground truth), gate-on/gate-off ablation
 2. **Extend** — small LAMMPS NEMD engine, benchmark battery
 3. **Apply** — glassy-carbon campaigns via A3HT on ALCF
+

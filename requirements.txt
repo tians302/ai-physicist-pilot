@@ -1,0 +1,4 @@
+numpy
+scipy
+matplotlib
+anthropic  # optional: loop runs in scripted mode without it

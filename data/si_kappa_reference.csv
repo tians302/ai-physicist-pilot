@@ -1,0 +1,23 @@
+# Thermal conductivity of natural silicon, 50-500 K.
+# Values: recommended curve of Touloukian (TPRC Data Series Vol.1, 1970),
+# which is based primarily on Glassbrenner & Slack, Phys. Rev. 134, A1058 (1964),
+# DOI 10.1103/PhysRev.134.A1058. Stated measurement uncertainty ~5%.
+# NOTE: approximate transcription from tabulated recommended values;
+# TODO re-digitize directly from the primary source before publication.
+T_K,kappa_W_mK,sigma_W_mK
+50,2680,134
+60,2050,103
+70,1510,76
+80,1200,60
+90,1020,51
+100,884,44
+125,585,29
+150,409,20
+175,325,16
+200,264,13
+250,191,10
+300,148,7.4
+350,119,6.0
+400,98.9,4.9
+450,86.3,4.3
+500,76.2,3.8
