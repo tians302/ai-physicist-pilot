@@ -19,7 +19,7 @@ def _verdicts(report):
     return {g["name"]: g["passed"] for g in report["gates"]}
 
 
-def main():
+def test_gates_and_corruptions():
     eng = CallawayEngine()
     plan = ExperimentPlan(plan_id="t", hypothesis="Boundary scattering suppresses kappa at low T.")
     good = eng.run(plan, np.random.default_rng(0))
@@ -71,4 +71,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    test_gates_and_corruptions()

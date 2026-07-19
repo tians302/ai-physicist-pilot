@@ -49,6 +49,9 @@ class SiliconBoundary:
             "benchmark": self.name,
             "checks": checks,
             "success": all(c["passed"] for c in checks),
+            # L is an effective model parameter: only the qualitative trend is
+            # claimed; suppression magnitudes are not quantitative predictions.
+            "claim_scope": "qualitative_trend_only",
             "summary_stats": {
                 "suppression_low_T": float(suppression[0]),
                 "suppression_high_T": float(suppression[-1]),

@@ -59,6 +59,56 @@ def load_reference(data_path):
     return np.array(rows)
 
 
+N_HOLDOUT_BLOCKS = 4  # block split: contiguous T-blocks, alternately cal/hold
+
+
+def split_data(d, mode):
+    """Calibration/holdout split of T-sorted reference data.
+
+    'block' (default): partition into N_HOLDOUT_BLOCKS contiguous temperature
+    blocks and alternate calibration/holdout. Held-out points sit inside
+    multi-point gaps, so holdout validation is not nearest-neighbor
+    interpolation (closes Phase-1A debt item 2). 'alternating': legacy
+    point-wise split, retained for comparison/ablation only.
+    """
+    if mode == "alternating":
+        return d[0::2], d[1::2]
+    if mode == "block":
+        blocks = np.array_split(np.arange(len(d)), N_HOLDOUT_BLOCKS)
+        cal_ix = np.concatenate(blocks[0::2])
+        hold_ix = np.concatenate(blocks[1::2])
+        return d[cal_ix], d[hold_ix]
+    raise ValueError(f"unknown split mode: {mode!r}")
+
+
+def bootstrap_AB(cal, L0, x0, rng, n_boot=N_BOOTSTRAP, fit_fn=None, min_unique=4):
+    """True nonparametric bootstrap of the (A, B) fit.
+
+    Rows are resampled WITH replacement and multiplicity is preserved —
+    duplicated points enter the residual vector multiple times, weighting
+    the refit as a proper bootstrap requires (closes Phase-1A debt item 1;
+    the previous implementation collapsed each resample to unique indices).
+    Resamples with fewer than `min_unique` distinct points are skipped as
+    degenerate for a 2-parameter fit. `fit_fn(sub) -> (A, B)` is injectable
+    for testing.
+    """
+    if fit_fn is None:
+        def fit_fn(sub):
+            Ai, Bi, _ = _fit_AB(sub[:, 0], sub[:, 1], sub[:, 2], L0, x0=x0)
+            return Ai, Bi
+    n = len(cal)
+    out = []
+    for _ in range(n_boot):
+        idx = rng.integers(0, n, size=n)
+        if len(np.unique(idx)) < min_unique:
+            continue
+        try:
+            out.append(tuple(fit_fn(cal[idx])))  # multiplicity preserved
+        except Exception:
+            continue
+    return np.array(out) if out else np.empty((0, 2))
+
+
 class CallawayEngine:
     """Allowlisted engine: run(plan, rng) -> results dict with uncertainties."""
 
@@ -73,27 +123,15 @@ class CallawayEngine:
         d = self.data
         mask = (d[:, 0] >= plan.T_min_K) & (d[:, 0] <= plan.T_max_K)
         d = d[mask]
-        cal, hold = d[0::2], d[1::2]  # alternating split; agent never sees holdout
+        split_mode = getattr(plan, "split", "block")
+        cal, hold = split_data(d, split_mode)  # agent never sees holdout
         L0 = plan.baseline_boundary_length_m
         L1 = plan.intervention_boundary_length_m
 
         A, B, sol = _fit_AB(cal[:, 0], cal[:, 1], cal[:, 2], L0)
 
-        # Bootstrap over calibration points for parameter uncertainties
-        boot = []
-        n = len(cal)
-        for _ in range(N_BOOTSTRAP):
-            idx = rng.integers(0, n, size=n)
-            sub = cal[np.unique(idx)]
-            if len(sub) < 4:
-                continue
-            try:
-                Ai, Bi, _ = _fit_AB(sub[:, 0], sub[:, 1], sub[:, 2], L0,
-                                    x0=(np.log10(A), np.log10(B)))
-                boot.append((Ai, Bi))
-            except Exception:
-                continue
-        boot = np.array(boot) if boot else np.empty((0, 2))
+        # True bootstrap over calibration points for parameter uncertainties
+        boot = bootstrap_AB(cal, L0, (np.log10(A), np.log10(B)), rng)
 
         def chi2_dof(pts):
             model = kappa_curve(pts[:, 0], L0, A, B)
@@ -118,6 +156,8 @@ class CallawayEngine:
             "residuals_calibration": r_cal.tolist(),
             "residuals_holdout": r_hold.tolist(),
             "n_bootstrap_ok": int(len(boot)),
+            "bootstrap_method": "nonparametric_row_resample_multiplicity_v2",
+            "split_mode": split_mode,
             "bootstrap_cv": {
                 "A": float(np.std(boot[:, 0]) / np.mean(boot[:, 0])) if len(boot) else float("nan"),
                 "B": float(np.std(boot[:, 1]) / np.mean(boot[:, 1])) if len(boot) else float("nan"),

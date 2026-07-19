@@ -64,10 +64,16 @@ def write_note(run_dir, plan, results, gate_report, score_report, narrative,
 Callaway-style RTA model of kappa(T) with boundary (v/L), point-defect (A w^4) and
 Umklapp (B w^2 T exp[-Theta_D/3T]) scattering; Theta_D = {results['constants']['theta_D_K']} K,
 v = {results['constants']['v_m_s']} m/s (fixed). Only A, B fitted, on the calibration
-split of the Glassbrenner-Slack reference data (alternating split; holdout never
-seen during fitting). Baseline L = {results['constants']['L_baseline_m']:g} m;
+split of the Glassbrenner-Slack reference data ({results.get('split_mode', plan.split)} split;
+holdout never seen during fitting). Baseline L = {results['constants']['L_baseline_m']:g} m;
 intervention L = {results['constants']['L_intervention_m']:g} m.
 T range {plan.T_min_K:g}-{plan.T_max_K:g} K.
+
+**Scope caveat.** L is an *effective* boundary-scattering parameter of a simplified
+Callaway/Holland model with fixed Theta_D and v. The intervention curves support only
+the qualitative claim (suppression at every T, relatively stronger at low T); the
+numerical suppression magnitudes are NOT quantitative predictions for a physical
+{results['constants']['L_intervention_m']*1e6:g}-um sample.
 
 ## Fitted parameters (bootstrap uncertainties, n = {results['n_bootstrap_ok']})
 

@@ -1,4 +1,10 @@
-numpy
-scipy
-matplotlib
-anthropic  # optional: loop runs in scripted mode without it
+# Pinned environment (Phase 1B, WP0/WP1). Python >= 3.10; tested on 3.10.12.
+# Update pins only with a logged justification (pre-registration discipline).
+numpy==2.2.6
+scipy==1.15.3
+matplotlib==3.10.9
+pydantic==2.13.4
+pandas==2.3.3
+ase==3.29.0
+pytest==9.1.1
+anthropic  # optional: loop runs in scripted mode without it; pin when WP11 starts

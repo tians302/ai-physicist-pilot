@@ -16,7 +16,7 @@ BOUNDS = {
 }
 ALLOWED_ENGINES = {"callaway_rta_si"}
 ALLOWED_FREE_PARAMS = {"A", "B"}
-ALLOWED_SPLITS = {"alternating"}
+ALLOWED_SPLITS = {"block", "alternating"}  # block = default; alternating kept for comparison only (interpolative)
 ALLOWED_DATASETS = {"si_kappa_reference"}
 
 
@@ -32,7 +32,7 @@ class ExperimentPlan:
     intervention_boundary_length_m: float = 1e-5  # 10 um
     free_params: tuple = ("A", "B")
     dataset: str = "si_kappa_reference"
-    split: str = "alternating"
+    split: str = "block"
 
     def to_dict(self):
         d = asdict(self)

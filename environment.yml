@@ -1,0 +1,10 @@
+# Conda environment (laptop + CARC). LAMMPS is pinned separately at WP3:
+# record exact release tag, build flags, and packages in a build manifest.
+name: ai-physicist
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10
+  - pip
+  - pip:
+      - -r requirements.txt
