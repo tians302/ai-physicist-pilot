@@ -1,0 +1,142 @@
+{
+  "written_utc": "2026-07-19T18:15:08+00:00",
+  "host": "claude",
+  "platform": "Linux-6.8.0-124-generic-aarch64-with-glibc2.35",
+  "python": "3.10.12",
+  "binary": "/tmp/lmp_shim",
+  "binary_sha256": "01d03a830a3964cc4ef4dac039b905618aa557d7abb3bf0242544b0bad36d0ed",
+  "version_line": "Large-scale Atomic/Molecular Massively Parallel Simulator - 22 Jul 2025 - Update 4",
+  "packages": [
+    "AMOEBA",
+    "ASPHERE",
+    "BOCS",
+    "BODY",
+    "BPM",
+    "BROWNIAN",
+    "CG-DNA",
+    "CG-SPICA",
+    "CLASS2",
+    "COLLOID",
+    "COLVARS",
+    "COMPRESS",
+    "CORESHELL",
+    "DIELECTRIC",
+    "DIFFRACTION",
+    "DIPOLE",
+    "DPD-BASIC",
+    "DPD-MESO",
+    "DPD-REACT",
+    "DPD-SMOOTH",
+    "DRUDE",
+    "EFF",
+    "ELECTRODE",
+    "EXTRA-COMMAND",
+    "EXTRA-COMPUTE",
+    "EXTRA-DUMP",
+    "EXTRA-FIX",
+    "EXTRA-MOLECULE",
+    "EXTRA-PAIR",
+    "FEP",
+    "GRANULAR",
+    "INTERLAYER",
+    "KSPACE",
+    "LEPTON",
+    "MACHDYN",
+    "MANYBODY",
+    "MC",
+    "MEAM",
+    "MESONT",
+    "MISC",
+    "ML-IAP",
+    "ML-POD",
+    "ML-SNAP",
+    "ML-UF3",
+    "MOFFF",
+    "MOLECULE",
+    "OPENMP",
+    "OPT",
+    "ORIENT",
+    "PERI",
+    "PHONON",
+    "PLUGIN",
+    "POEMS",
+    "QEQ",
+    "REACTION",
+    "REAXFF",
+    "REPLICA",
+    "RHEO",
+    "RIGID",
+    "SHOCK",
+    "SPH",
+    "SPIN",
+    "SRD",
+    "TALLY",
+    "UEF",
+    "VORONOI",
+    "YAFF"
+  ],
+  "note": "sandbox pip-wheel lammps 2025.7.22.4.0 (aarch64) + mpich wheel; shim exports LD_LIBRARY_PATH",
+  "checks": [
+    {
+      "name": "binary_found",
+      "passed": true,
+      "detail": "/tmp/lmp_shim"
+    },
+    {
+      "name": "version_readable",
+      "passed": true,
+      "detail": "Large-scale Atomic/Molecular Massively Parallel Simulator - 22 Jul 2025 - Update 4"
+    },
+    {
+      "name": "pkg_manybody",
+      "passed": true,
+      "detail": "needed for native SW"
+    },
+    {
+      "name": "pkg_kim_reported",
+      "passed": true,
+      "detail": "KIM ABSENT (ok for native smoke; required for pinned KIM models)"
+    },
+    {
+      "name": "relax_completed",
+      "passed": true,
+      "detail": "completed"
+    },
+    {
+      "name": "sw_a0_regression",
+      "passed": true,
+      "detail": "a0 = 5.4309 A (expect 5.431 \u00b1 0.01)"
+    },
+    {
+      "name": "sw_ecoh_regression",
+      "passed": true,
+      "detail": "Ecoh = -4.3366 eV/atom (expect -4.3364 \u00b1 0.01)"
+    },
+    {
+      "name": "residual_pressure",
+      "passed": true,
+      "detail": "pxx = -0.00 bar"
+    },
+    {
+      "name": "eos_completed",
+      "passed": true,
+      "detail": "completed"
+    },
+    {
+      "name": "eos_convex_minimum",
+      "passed": true,
+      "detail": "min at index 3/6; E ends -34.6453, -34.6489"
+    },
+    {
+      "name": "bad_run_not_silent",
+      "passed": true,
+      "detail": "exit_status=completed (adapter never raises)"
+    },
+    {
+      "name": "timeout_fails_closed",
+      "passed": true,
+      "detail": "exit_status=completed (1-s budget on 512 atoms)"
+    }
+  ],
+  "all_passed": true
+}

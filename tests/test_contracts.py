@@ -10,12 +10,12 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 import pytest
 from pydantic import ValidationError
 
-from contracts import (BaseExperimentPlan, CapabilityManifest, CurveValue,
-                       DimensionError, EnvironmentLock, GateRef, Observation,
-                       ObservationBundle, OutputSpec, PhysicalModelCard,
-                       RawRun, ResourceBudget, ScalarValue, TensorValue,
-                       ArtifactRef, convert, dim_of, same_dimension,
-                       to_canonical)
+from contracts import (BaseExperimentPlan, Bound, CapabilityManifest,
+                       CurveValue, DimensionError, EnvironmentLock, GateRef,
+                       Observation, ObservationBundle, OutputSpec,
+                       PhysicalModelCard, RawRun, ResourceBudget, ScalarValue,
+                       TensorValue, ArtifactRef, convert, dim_of,
+                       same_dimension, to_canonical)
 
 SHA = "0" * 64
 
@@ -101,12 +101,16 @@ def _manifest():
         outputs=[OutputSpec(name="E_V_curve", kind="curve", unit="eV",
                             conditions=["V"]),
                  OutputSpec(name="B0", kind="scalar", unit="GPa")],
-        validity_domain={"strain": (-0.05, 0.05)})
+        validity_domain={"strain": Bound(lo=-0.05, hi=0.05, unit="1")})
 
 
 def test_manifest_roundtrip_and_invariants():
     m = _roundtrip(_manifest())
-    assert m.validity_domain["strain"] == (-0.05, 0.05)
+    assert m.validity_domain["strain"].hi == 0.05
+    with pytest.raises(ValidationError):   # bounds must be ordered
+        Bound(lo=1.0, hi=0.0, unit="K")
+    with pytest.raises(ValidationError):   # bounds are dimensional
+        Bound(lo=0.0, hi=1.0, unit="wugs")
     with pytest.raises(ValidationError):   # gates are mandatory
         CapabilityManifest(**{**_manifest().model_dump(), "gates": []})
     with pytest.raises(ValidationError):   # family is a closed set

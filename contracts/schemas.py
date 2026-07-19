@@ -41,6 +41,9 @@ class _Strict(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
 
+StrictModel = _Strict   # public alias for downstream contract models
+
+
 # ---------------------------------------------------------------- values
 
 class ScalarValue(_Strict):
@@ -123,6 +126,22 @@ class GateRef(_Strict):
     params: dict[str, float] = {}
 
 
+class Bound(_Strict):
+    """Closed interval with an explicit unit — validity-domain entries are
+    dimensional, so routing/validation can convert before comparing."""
+    lo: float
+    hi: float
+    unit: str
+
+    _u = field_validator("unit")(_check_unit)
+
+    @model_validator(mode="after")
+    def _ordered(self):
+        if self.lo > self.hi:
+            raise ValueError(f"bound lo {self.lo} > hi {self.hi}")
+        return self
+
+
 class OutputSpec(_Strict):
     name: str
     kind: Literal["scalar", "curve", "tensor"]
@@ -139,6 +158,7 @@ class CapabilityManifest(_Strict):
     capability_id: str
     version: str
     property_name: str
+    property_aliases: list[str] = []
     property_family: Literal["thermal-analytic", "structural", "mechanical",
                              "thermal", "transport"]
     engine: str
@@ -148,7 +168,7 @@ class CapabilityManifest(_Strict):
     analyzers: list[str]
     gates: list[GateRef]
     outputs: list[OutputSpec]
-    validity_domain: dict[str, tuple[float, float]] = {}  # plan-parameter bounds
+    validity_domain: dict[str, Bound] = {}  # dimensional plan-parameter bounds
     provenance: dict[str, str] = {}
 
     @model_validator(mode="after")
