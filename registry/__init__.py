@@ -46,7 +46,14 @@ class CapabilityRegistry:
 
 
 def default_registry() -> CapabilityRegistry:
-    from registry.builtin import callaway_capability
+    from registry.builtin import (callaway_capability,
+                                  lj_diffusion_capability,
+                                  lj_kappa_gk_capability,
+                                  si_elastic_capability, si_eos_capability,
+                                  si_expansion_capability)
     reg = CapabilityRegistry()
-    reg.register(callaway_capability())
+    for cap in (callaway_capability(), si_eos_capability(),
+                si_elastic_capability(), si_expansion_capability(),
+                lj_diffusion_capability(), lj_kappa_gk_capability()):
+        reg.register(cap)
     return reg

@@ -59,13 +59,34 @@ MODELS: dict[str, PinnedModel] = {m.key: m for m in [
         notes="VERIFY exact current ID/version on openkim.org at pin time "
               "(WP3 checklist), record checksum + date, then set verified."),
     PinnedModel(
+        key="lj_argon",
+        mode="native_lj",
+        elements=("Ar",),
+        verified=True,
+        pinned_date="2026-07-19",
+        notes="Parameter-free reduced-unit Lennard-Jones (eps=sigma=1, "
+              "rc=2.5). WP8 transport ladder; literature comparisons via "
+              "reduced state points."),
+    PinnedModel(
+        key="tersoff_si_native_1988",
+        mode="native_tersoff",
+        elements=("Si",),
+        file_name="Si.tersoff",
+        file_sha256="5b55dc7be1569193f468b9f56128a36e67feedd8e145561f61aec4b49a33d723",
+        verified=True,
+        pinned_date="2026-07-19",
+        notes="Tersoff Si, PRB 37, 6991 (1988). Pinned from the official "
+              "LAMMPS 2025-07-22 release potentials/ (wheel 2025.7.22.4.0). "
+              "Second, independently parameterized Si model for WP12 "
+              "cross-model sensitivity. Regression fixtures only."),
+    PinnedModel(
         key="tersoff_si_kim",
         mode="kim",
         elements=("Si",),
         kim_id="PENDING_PIN_VERIFY_ON_OPENKIM",
         verified=False,
-        notes="Second, independently parameterized Si model for cross-model "
-              "sensitivity (WP12). Choose + verify on openkim.org at pin time."),
+        notes="Optional KIM twin of tersoff_si_native_1988; verify on "
+              "openkim.org at pin time if KIM provenance is wanted."),
 ]}
 
 
@@ -96,4 +117,10 @@ def pair_blocks(model: PinnedModel) -> tuple[str, str]:
         # artifact; also avoids LAMMPS tokenization issues with paths)
         return ("units metal",
                 f"pair_style sw\npair_coeff * * {model.file_name} {els}")
+    if model.mode == "native_lj":
+        return ("units lj",
+                "pair_style lj/cut 2.5\npair_coeff 1 1 1.0 1.0")
+    if model.mode == "native_tersoff":
+        return ("units metal",
+                f"pair_style tersoff\npair_coeff * * {model.file_name} {els}")
     raise UnpinnedModelError(f"unknown model mode {model.mode!r}")

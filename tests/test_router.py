@@ -34,7 +34,15 @@ SUPPORTED = [
          conditions={"intervention_boundary_length_m":
                      ScalarValue(value=10.0, unit="um")}),
     _req("s3", prop="thermal_conductivity", engine="callaway_rta_si"),
+    _req("s4", prop="equation_of_state", engine="lammps",
+         conditions={"a0_A": ScalarValue(value=0.543, unit="nm")},
+         hyp="Diamond-Si E(V) follows Birch-Murnaghan near equilibrium."),
+    _req("s5", prop="Cij",
+         hyp="Silicon's elastic tensor is cubic and mechanically stable."),
 ]
+EXPECTED_CAP = {"s1": "si_kappa_callaway", "s2": "si_kappa_callaway",
+                "s3": "si_kappa_callaway", "s4": "si_eos_sw_lammps",
+                "s5": "si_elastic_sw_lammps"}
 UNSUPPORTED = [
     _req("u1", prop="band_gap",
          hyp="Compressive strain widens the silicon band gap."),
@@ -63,8 +71,7 @@ def test_acceptance_100pct_rejection_and_metrics():
         d = log.record(route(r, reg))
         labels[r.request_id] = True
         assert d.accepted and d.outcome == "routed", (r.request_id, d.reasons)
-        assert d.capability_id == "si_kappa_callaway"
-        assert d.plan_type == "ExperimentPlan"
+        assert d.capability_id == EXPECTED_CAP[r.request_id]
     for r in UNSUPPORTED:
         d = log.record(route(r, reg))
         labels[r.request_id] = False
@@ -74,18 +81,22 @@ def test_acceptance_100pct_rejection_and_metrics():
 
     m = log.rejection_metrics(labels)
     assert m["precision"] == 1.0 and m["recall"] == 1.0 and m["accuracy"] == 1.0
-    assert log.summary() == {"n": 11, "routed": 3, "rejected": 8}
+    assert log.summary() == {"n": 13, "routed": 5, "rejected": 8}
+
+
+def _any_reason(req, reg, needle):
+    return any(needle in r for r in route(req, reg).reasons)
 
 
 def test_rejection_reasons_are_specific():
     reg = default_registry()
-    assert "not offered" in route(UNSUPPORTED[0], reg).reasons[0]
-    assert "outside model coverage" in route(UNSUPPORTED[1], reg).reasons[0]
-    assert "outside" in route(UNSUPPORTED[2], reg).reasons[0]
-    assert "engine" in route(UNSUPPORTED[3], reg).reasons[0]
-    assert "dimension mismatch" in route(UNSUPPORTED[5], reg).reasons[0]
-    assert "fail-closed" in route(UNSUPPORTED[6], reg).reasons[0]
-    assert "declares no elements" in route(UNSUPPORTED[7], reg).reasons[0]
+    assert _any_reason(UNSUPPORTED[0], reg, "not offered")
+    assert _any_reason(UNSUPPORTED[1], reg, "outside model coverage")
+    assert _any_reason(UNSUPPORTED[2], reg, "outside")
+    assert _any_reason(UNSUPPORTED[3], reg, "engine")
+    assert _any_reason(UNSUPPORTED[5], reg, "dimension mismatch")
+    assert _any_reason(UNSUPPORTED[6], reg, "fail-closed")
+    assert _any_reason(UNSUPPORTED[7], reg, "declares no elements")
 
 
 def test_determinism_and_tie_break():
@@ -123,7 +134,10 @@ def test_preference_selects_but_never_expands():
 
 def test_registry_basics():
     reg = default_registry()
-    assert len(reg) == 1 and "si_kappa_callaway" in reg
+    assert len(reg) == 6 and "si_kappa_callaway" in reg
+    assert "si_eos_sw_lammps" in reg and "si_elastic_sw_lammps" in reg
+    assert {"si_expansion_sw_lammps", "lj_diffusion_lammps",
+            "lj_kappa_gk_lammps"} <= set(reg.ids())
     assert [m.capability_id for m in reg.supports_property("kappa_vs_T")] \
         == ["si_kappa_callaway"]
     with pytest.raises(DuplicateCapabilityError):

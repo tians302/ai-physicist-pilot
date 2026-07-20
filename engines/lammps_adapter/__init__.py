@@ -36,10 +36,16 @@ ADAPTER_VERSION = "0.1"
 _KIND_BY_SUFFIX = {".in": "other", ".data": "structure", ".json": "json",
                    ".lammps": "log", ".txt": "log"}
 
+_STATIC_KEYS = {"natoms", "pe_eV", "vol_A3", "pxx_bar", "pyy_bar",
+                "pzz_bar", "pxy_bar", "pxz_bar", "pyz_bar"}
 _REQUIRED_SENTINELS = {
     "relax_v1": {"natoms", "pe_eV", "vol_A3", "lx_A"},
-    "static_v1": {"natoms", "pe_eV", "vol_A3", "pxx_bar", "pyy_bar",
-                  "pzz_bar", "pxy_bar", "pxz_bar", "pyz_bar"},
+    "static_v1": _STATIC_KEYS,
+    "static_relaxed_ions_v1": _STATIC_KEYS,
+    "npt_lattice_v1": {"natoms", "lx_avg_A", "lx_avg_half_A"},
+    "lj_msd_v1": {"natoms", "n_checkpoints", "steps_per_checkpoint",
+                  "dt_lj", "msd_1"},
+    "lj_gk_v1": {"natoms", "k11_lj", "k22_lj", "k33_lj"},
 }
 
 
@@ -92,11 +98,14 @@ class LammpsAdapter:
         """One isolated engine invocation. Returns (status, sentinels)."""
         d = workdir / label
         d.mkdir(parents=True, exist_ok=True)
-        (d / "structure.data").write_text(data_text)
+        vals = dict(values)
+        if data_text is not None:
+            (d / "structure.data").write_text(data_text)
+            vals["data_file"] = "structure.data"
         if model.file_path is not None:      # potential file: run-local copy
             shutil.copyfile(model.file_path, d / model.file_name)
         init_block, interaction_block = pair_blocks(model)
-        script = render(template, {**values, "data_file": "structure.data"},
+        script = render(template, vals,
                         {"init_block": init_block,
                          "interaction_block": interaction_block})
         (d / "input.in").write_text(script)
@@ -125,7 +134,9 @@ class LammpsAdapter:
 
     # ---------------------------------------------------------- protocols
 
-    def execute(self, plan, workdir) -> RawRun:
+    def execute(self, plan, workdir, seed=None) -> RawRun:
+        # seed arg accepted for executor-interface parity; plan.seed is
+        # authoritative for LAMMPS protocols (deterministic statics)
         workdir = Path(workdir)
         workdir.mkdir(parents=True, exist_ok=True)
         started = datetime.now(timezone.utc)
@@ -166,6 +177,58 @@ class LammpsAdapter:
         def left():
             return budget - (time.time() - t0)
 
+        # ---- MD protocols (WP8): no 0 K pre-relax stage -----------------
+        if plan.protocol == "npt_lattice_v1":
+            atoms, lin0 = st.diamond_si(plan.a0_A, plan.supercell)
+            data = st.to_lammps_data(atoms)
+            points = []
+            for i, T in enumerate(plan.T_list_K):
+                if left() <= 0:
+                    return "timeout", {"npt_points": points}
+                vals = {"T_K": T, "vseed": plan.seed * 7919 + 13 + i,
+                        "nsteps_equil": plan.nsteps_equil,
+                        "nsteps_prod": plan.nsteps_prod}
+                stat, sen = self._run_one(workdir, f"npt_T{int(T)}",
+                                          "npt_lattice_v1", vals, model,
+                                          data, max(left(), 1.0))
+                if stat != "completed":
+                    return stat, {"npt_points": points, "failed_at_T": T}
+                points.append({"T_K": float(T), "sentinels": sen})
+            return "completed", {
+                "adapter_version": ADAPTER_VERSION,
+                "model_key": plan.model_key, "supercell": plan.supercell,
+                "structure_lineage": [lin0], "npt_points": points}
+
+        if plan.protocol == "lj_msd_v1":
+            vals = {"rho_star": plan.rho_star, "T_star": plan.T_star,
+                    "n_cells": plan.n_cells, "vseed": plan.seed * 7919 + 13,
+                    "nsteps_equil": plan.nsteps_equil,
+                    "n_checkpoints": plan.n_checkpoints,
+                    "steps_per_checkpoint": plan.steps_per_checkpoint}
+            stat, sen = self._run_one(workdir, "msd", "lj_msd_v1", vals,
+                                      model, None, max(left(), 1.0))
+            return stat, {"adapter_version": ADAPTER_VERSION,
+                          "model_key": plan.model_key,
+                          "state_point": {"rho_star": plan.rho_star,
+                                          "T_star": plan.T_star},
+                          "msd": sen}
+
+        if plan.protocol == "lj_gk_v1":
+            vals = {"rho_star": plan.rho_star, "T_star": plan.T_star,
+                    "n_cells": plan.n_cells, "vseed": plan.seed * 7919 + 13,
+                    "nsteps_equil": plan.nsteps_equil,
+                    "nsteps_prod": plan.nsteps_prod,
+                    "nevery": plan.nevery, "nrepeat": plan.nrepeat,
+                    "nfreq": plan.nevery * plan.nrepeat}
+            stat, sen = self._run_one(workdir, "gk", "lj_gk_v1", vals,
+                                      model, None, max(left(), 1.0))
+            return stat, {"adapter_version": ADAPTER_VERSION,
+                          "model_key": plan.model_key,
+                          "state_point": {"rho_star": plan.rho_star,
+                                          "T_star": plan.T_star},
+                          "gk": sen}
+
+        # ---- structural protocols: 0 K relax first ----------------------
         min_vals = {"etol": plan.etol, "ftol": plan.ftol,
                     "maxiter": plan.maxiter, "maxeval": plan.maxeval}
         atoms, lin0 = st.diamond_si(plan.a0_A, plan.supercell)
@@ -208,6 +271,9 @@ class LammpsAdapter:
 
         # 2b. finite-strain stress sweep
         if plan.protocol == "finite_strain_v1":
+            relax_ions = getattr(plan, "relax_ions", True)
+            s_template = "static_relaxed_ions_v1" if relax_ions else "static_v1"
+            s_values = dict(min_vals) if relax_ions else {}
             amps = np.linspace(plan.max_strain / plan.n_strains_per_side,
                                plan.max_strain, plan.n_strains_per_side)
             points = []
@@ -218,7 +284,7 @@ class LammpsAdapter:
                     F = st.strain_matrix(v, float(a))
                     cell, lin = st.apply_deformation(relaxed, F, relaxed_lin)
                     stat, sen = self._run_one(
-                        workdir, f"strain_v{v}_{a:+.5f}", "static_v1", {},
+                        workdir, f"strain_v{v}_{a:+.5f}", s_template, s_values,
                         model, st.to_lammps_data(cell), max(left(), 1.0))
                     if stat != "completed":
                         return stat, {**raw, "strain_points": points,
@@ -229,7 +295,8 @@ class LammpsAdapter:
             raw["strain_points"] = points
             raw["conventions"] = {
                 "strain": "engineering; shear amplitude = gamma, eps_ij = gamma/2",
-                "stress_units": "bar (LAMMPS metal units); sign: pressure tensor"}
+                "stress_units": "bar (LAMMPS metal units); sign: pressure tensor",
+                "ion_relaxation": relax_ions}
             return "completed", raw
 
         raise ValueError(f"unknown protocol {plan.protocol!r}")

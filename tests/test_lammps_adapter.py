@@ -72,17 +72,16 @@ def _relax_plan(**kw):
 
 def test_templates_have_no_stray_placeholders_after_render():
     import re
-    for name in TEMPLATES:
-        vals = {"data_file": "structure.data"}
-        if name == "relax_v1":
-            vals |= {"etol": 0.0, "ftol": 1e-8, "maxiter": 100,
-                     "maxeval": 1000, "out_data": "relaxed.data"}
+    for name, tmpl in TEMPLATES.items():
+        needed = set(_PLACEHOLDER.findall(tmpl)) - {"init_block",
+                                                    "interaction_block"}
+        vals = {k: "1" for k in needed}          # dummy safe values
         out = render(name, vals, {"init_block": "units metal",
                                   "interaction_block": "pair_style sw"})
         # LAMMPS ${var} references are legitimate; anything else in braces is
         # an unfilled placeholder and must not survive rendering
-        stripped = re.sub(r"\$\{[a-z0-9_]+\}", "", out)
-        assert _PLACEHOLDER.findall(stripped) == []
+        stripped = re.sub(r"\$\{[A-Za-z0-9_]+\}", "", out)
+        assert _PLACEHOLDER.findall(stripped) == [], name
         assert "${" in out                       # LAMMPS variables intact
 
 

@@ -16,3 +16,14 @@ SW_SI_REGRESSION = {
     "ecoh_eV_per_atom": {"value": -4.3364, "tol": 0.01},
     "residual_pressure_bar": {"tol": 50.0},   # after box/relax at 0 K
 }
+
+# WP4: same-model mechanical fixtures. Values are the standard published
+# SW-Si results (relaxed-ion C44), reproduced by this pipeline on
+# 2026-07-19 (LAMMPS 2025-07-22, sandbox): C11 151.42, C12 76.43,
+# C44 56.45 (relaxed) / 109.76 (affine), B0(EOS) 101.49 GPa.
+SW_SI_MECHANICAL_REGRESSION = {
+    "B0_GPa": {"value": 101.4, "tol": 1.0},
+    "C11_GPa": {"value": 151.4, "tol": 1.5},
+    "C12_GPa": {"value": 76.4, "tol": 1.5},
+    "C44_relaxed_GPa": {"value": 56.4, "tol": 1.5},
+}

@@ -1,0 +1,294 @@
+{
+  "generated_utc": "2026-07-20T00:37:02+00:00",
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "metrics": {
+    "silicon_boundary": {
+      "n_seeds": 6,
+      "recovery": {
+        "k": 6,
+        "n": 6,
+        "wilson95": [
+          1.0,
+          0.6096657120978346,
+          1.0
+        ]
+      },
+      "unflagged_false_claims_gates_on": {
+        "k": 0,
+        "n": 6,
+        "wilson95": [
+          0.0,
+          0.0,
+          0.39033428790216534
+        ]
+      },
+      "unflagged_false_claims_gates_off": {
+        "k": 5,
+        "n": 6,
+        "wilson95": [
+          0.8333333333333334,
+          0.43649717781352987,
+          0.9699466302516935
+        ]
+      },
+      "arms": {
+        "clean_on": [
+          {
+            "seed": 0,
+            "corruption": null,
+            "status": "completed",
+            "gate_passed": true,
+            "valid": true,
+            "score": true,
+            "unflagged_false_claim": false,
+            "recovered": true
+          },
+          {
+            "seed": 1,
+            "corruption": null,
+            "status": "completed",
+            "gate_passed": true,
+            "valid": true,
+            "score": true,
+            "unflagged_false_claim": false,
+            "recovered": true
+          },
+          {
+            "seed": 2,
+            "corruption": null,
+            "status": "completed",
+            "gate_passed": true,
+            "valid": true,
+            "score": true,
+            "unflagged_false_claim": false,
+            "recovered": true
+          },
+          {
+            "seed": 3,
+            "corruption": null,
+            "status": "completed",
+            "gate_passed": true,
+            "valid": true,
+            "score": true,
+            "unflagged_false_claim": false,
+            "recovered": true
+          },
+          {
+            "seed": 4,
+            "corruption": null,
+            "status": "completed",
+            "gate_passed": true,
+            "valid": true,
+            "score": true,
+            "unflagged_false_claim": false,
+            "recovered": true
+          },
+          {
+            "seed": 5,
+            "corruption": null,
+            "status": "completed",
+            "gate_passed": true,
+            "valid": true,
+            "score": true,
+            "unflagged_false_claim": false,
+            "recovered": true
+          }
+        ],
+        "clean_off": [
+          {
+            "seed": 0,
+            "corruption": null,
+            "status": "completed",
+            "gate_passed": true,
+            "valid": true,
+            "score": true,
+            "unflagged_false_claim": false,
+            "recovered": true
+          },
+          {
+            "seed": 1,
+            "corruption": null,
+            "status": "completed",
+            "gate_passed": true,
+            "valid": true,
+            "score": true,
+            "unflagged_false_claim": false,
+            "recovered": true
+          },
+          {
+            "seed": 2,
+            "corruption": null,
+            "status": "completed",
+            "gate_passed": true,
+            "valid": true,
+            "score": true,
+            "unflagged_false_claim": false,
+            "recovered": true
+          },
+          {
+            "seed": 3,
+            "corruption": null,
+            "status": "completed",
+            "gate_passed": true,
+            "valid": true,
+            "score": true,
+            "unflagged_false_claim": false,
+            "recovered": true
+          },
+          {
+            "seed": 4,
+            "corruption": null,
+            "status": "completed",
+            "gate_passed": true,
+            "valid": true,
+            "score": true,
+            "unflagged_false_claim": false,
+            "recovered": true
+          },
+          {
+            "seed": 5,
+            "corruption": null,
+            "status": "completed",
+            "gate_passed": true,
+            "valid": true,
+            "score": true,
+            "unflagged_false_claim": false,
+            "recovered": true
+          }
+        ],
+        "corr_on": [
+          {
+            "seed": 0,
+            "corruption": "bad_fit",
+            "status": "completed",
+            "gate_passed": false,
+            "valid": false,
+            "score": true,
+            "unflagged_false_claim": false,
+            "recovered": false
+          },
+          {
+            "seed": 1,
+            "corruption": "holdout_disagreement",
+            "status": "completed",
+            "gate_passed": false,
+            "valid": false,
+            "score": true,
+            "unflagged_false_claim": false,
+            "recovered": false
+          },
+          {
+            "seed": 2,
+            "corruption": "missing_sigma",
+            "status": "completed",
+            "gate_passed": false,
+            "valid": false,
+            "score": true,
+            "unflagged_false_claim": false,
+            "recovered": false
+          },
+          {
+            "seed": 3,
+            "corruption": "nan_curve",
+            "status": "completed",
+            "gate_passed": false,
+            "valid": false,
+            "score": false,
+            "unflagged_false_claim": false,
+            "recovered": false
+          },
+          {
+            "seed": 4,
+            "corruption": "structured_residuals",
+            "status": "completed",
+            "gate_passed": false,
+            "valid": false,
+            "score": true,
+            "unflagged_false_claim": false,
+            "recovered": false
+          },
+          {
+            "seed": 5,
+            "corruption": "unstable_bootstrap",
+            "status": "completed",
+            "gate_passed": false,
+            "valid": false,
+            "score": true,
+            "unflagged_false_claim": false,
+            "recovered": false
+          }
+        ],
+        "corr_off": [
+          {
+            "seed": 0,
+            "corruption": "bad_fit",
+            "status": "completed",
+            "gate_passed": false,
+            "valid": true,
+            "score": true,
+            "unflagged_false_claim": true,
+            "recovered": false
+          },
+          {
+            "seed": 1,
+            "corruption": "holdout_disagreement",
+            "status": "completed",
+            "gate_passed": false,
+            "valid": true,
+            "score": true,
+            "unflagged_false_claim": true,
+            "recovered": false
+          },
+          {
+            "seed": 2,
+            "corruption": "missing_sigma",
+            "status": "completed",
+            "gate_passed": false,
+            "valid": true,
+            "score": true,
+            "unflagged_false_claim": true,
+            "recovered": false
+          },
+          {
+            "seed": 3,
+            "corruption": "nan_curve",
+            "status": "completed",
+            "gate_passed": false,
+            "valid": true,
+            "score": false,
+            "unflagged_false_claim": false,
+            "recovered": false
+          },
+          {
+            "seed": 4,
+            "corruption": "structured_residuals",
+            "status": "completed",
+            "gate_passed": false,
+            "valid": true,
+            "score": true,
+            "unflagged_false_claim": true,
+            "recovered": false
+          },
+          {
+            "seed": 5,
+            "corruption": "unstable_bootstrap",
+            "status": "completed",
+            "gate_passed": false,
+            "valid": true,
+            "score": true,
+            "unflagged_false_claim": true,
+            "recovered": false
+          }
+        ]
+      }
+    }
+  },
+  "note": "Headline claims require the pre-registered N on CARC after the WP7 freeze; smaller runs are pilots."
+}

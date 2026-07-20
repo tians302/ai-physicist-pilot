@@ -1,0 +1,53 @@
+{
+  "generated_utc": "2026-07-20T00:46:17+00:00",
+  "models": [
+    {
+      "model": "sw_si_native_1985",
+      "eos": {
+        "gates_passed": true,
+        "B0_GPa": 101.48849349130501,
+        "V0_A3": 160.18676524052637,
+        "a0_A": 5.430946740406867,
+        "B0_prime": 2.9326475653116773,
+        "walltime_s": 1.7666361331939697
+      },
+      "elastic": {
+        "gates_passed": true,
+        "C11_GPa": 151.4235764958678,
+        "C12_GPa": 76.42904769741814,
+        "C44_GPa": 56.44787292781317,
+        "walltime_s": 3.365446090698242
+      }
+    },
+    {
+      "model": "tersoff_si_native_1988",
+      "eos": {
+        "gates_passed": true,
+        "B0_GPa": 97.72600072036737,
+        "V0_A3": 160.21209554479327,
+        "a0_A": 5.431232990195036,
+        "B0_prime": 4.574894637764024,
+        "walltime_s": 1.7237980365753174
+      },
+      "elastic": {
+        "gates_passed": true,
+        "C11_GPa": 121.70253625278839,
+        "C12_GPa": 85.8170520906397,
+        "C44_GPa": 10.311463052952108,
+        "walltime_s": 3.3813838958740234
+      }
+    }
+  ],
+  "relative_spread": {
+    "a0": 5.270577273958665e-05,
+    "B0": 0.03777328337304474,
+    "C11": 0.21763602127951887,
+    "C12": 0.11572548622722048,
+    "C44": 1.3821710236349234
+  },
+  "cost_ledger_s": {
+    "sw_si_native_1985": 5.132082223892212,
+    "tersoff_si_native_1988": 5.105181932449341
+  },
+  "note": "Same protocols, same gates, two independent potentials. Spread = |a-b| / mean(|a|,|b|); observables with large spread are strongly model-conditional and must be reported as such (PLAN.md)."
+}

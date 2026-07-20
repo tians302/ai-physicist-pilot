@@ -1,0 +1,96 @@
+{
+  "_rules": [
+    "PLAN.md: reference values enter only with DOI, stated uncertainty, temperature/conditions, and transcription method. No numbers from memory or LLM output.",
+    "verified=false entries MUST NOT be used for benchmark scoring (WP6 scorer enforces this).",
+    "provisional_value fields come from a secondary review and exist only for smoke comparisons; transcribe primaries from the PDFs, add uncertainty, then set verified=true.",
+    "These are INDEPENDENT physics answer keys (experiment) — distinct from same-model SW regression fixtures in engines/lammps_adapter/fixtures.py."
+  ],
+  "entries": [
+    {
+      "name": "a0",
+      "unit": "Ang",
+      "value": null,
+      "uncertainty": null,
+      "provisional_value": 5.431,
+      "temperature_K": 298,
+      "method": "X-ray lattice parameter",
+      "source": {
+        "note": "Choose primary: CODATA silicon lattice parameter or classic X-ray determination; record DOI at transcription time.",
+        "doi": "TO_CURATE"
+      },
+      "transcription": {"by": null, "date": null, "method": null},
+      "verified": false
+    },
+    {
+      "name": "C11",
+      "unit": "GPa",
+      "value": null,
+      "uncertainty": null,
+      "provisional_value": 165.7,
+      "temperature_K": 298,
+      "method": "ultrasonic pulse-echo, single crystal",
+      "source": {
+        "authors": "H. J. McSkimin, P. Andreatch",
+        "title": "Elastic Moduli of Silicon vs Hydrostatic Pressure at 25.0 C and -195.8 C",
+        "journal": "J. Appl. Phys. 35, 2161-2165 (1964)",
+        "doi": "VERIFY_ON_PDF (aip.org; vol 35 p 2161)",
+        "cross_check": {
+          "authors": "J. J. Hall",
+          "journal": "Phys. Rev. 161, 756 (1967)",
+          "doi": "10.1103/PhysRev.161.756"
+        },
+        "secondary_for_provisional": "Hopcroft, Nix, Kenny, J. MEMS 19, 229 (2010)"
+      },
+      "transcription": {"by": null, "date": null, "method": null},
+      "verified": false
+    },
+    {
+      "name": "C12",
+      "unit": "GPa",
+      "value": null,
+      "uncertainty": null,
+      "provisional_value": 63.9,
+      "temperature_K": 298,
+      "method": "ultrasonic pulse-echo, single crystal",
+      "source": {"same_as": "C11"},
+      "transcription": {"by": null, "date": null, "method": null},
+      "verified": false
+    },
+    {
+      "name": "C44",
+      "unit": "GPa",
+      "value": null,
+      "uncertainty": null,
+      "provisional_value": 79.6,
+      "temperature_K": 298,
+      "method": "ultrasonic pulse-echo, single crystal",
+      "source": {"same_as": "C11"},
+      "transcription": {"by": null, "date": null, "method": null},
+      "verified": false
+    },
+    {
+      "name": "B0",
+      "unit": "GPa",
+      "value": null,
+      "uncertainty": null,
+      "provisional_value": 97.8,
+      "temperature_K": 298,
+      "method": "derived (C11+2*C12)/3 from ultrasonic Cij",
+      "source": {"same_as": "C11", "derivation": "(C11+2C12)/3"},
+      "transcription": {"by": null, "date": null, "method": null},
+      "verified": false
+    },
+    {
+      "name": "stability_relations",
+      "unit": "1",
+      "value": "C11-C12>0, C11+2C12>0, C44>0, cubic symmetry",
+      "uncertainty": null,
+      "temperature_K": null,
+      "method": "Born stability criteria (qualitative key)",
+      "source": {"note": "textbook criteria; cite Born & Huang at write-up"},
+      "transcription": {"by": "structural", "date": "2026-07-19", "method": "qualitative"},
+      "verified": true
+    }
+  ],
+  "model_conditional_note": "SW-Si values (C11 151.4, C12 76.4, C44 56.4 relaxed) differ from experiment by construction; benchmark scoring must compare model-conditionally and report both, per PLAN.md discussion of model bias."
+}

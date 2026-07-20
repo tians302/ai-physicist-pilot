@@ -1,0 +1,62 @@
+[
+  {
+    "seed": 0,
+    "corruption": "bad_fit",
+    "status": "completed",
+    "gate_passed": false,
+    "valid": false,
+    "score": true,
+    "unflagged_false_claim": false,
+    "recovered": false
+  },
+  {
+    "seed": 1,
+    "corruption": "holdout_disagreement",
+    "status": "completed",
+    "gate_passed": false,
+    "valid": false,
+    "score": true,
+    "unflagged_false_claim": false,
+    "recovered": false
+  },
+  {
+    "seed": 2,
+    "corruption": "missing_sigma",
+    "status": "completed",
+    "gate_passed": false,
+    "valid": false,
+    "score": true,
+    "unflagged_false_claim": false,
+    "recovered": false
+  },
+  {
+    "seed": 3,
+    "corruption": "nan_curve",
+    "status": "completed",
+    "gate_passed": false,
+    "valid": false,
+    "score": false,
+    "unflagged_false_claim": false,
+    "recovered": false
+  },
+  {
+    "seed": 4,
+    "corruption": "structured_residuals",
+    "status": "completed",
+    "gate_passed": false,
+    "valid": false,
+    "score": true,
+    "unflagged_false_claim": false,
+    "recovered": false
+  },
+  {
+    "seed": 5,
+    "corruption": "unstable_bootstrap",
+    "status": "completed",
+    "gate_passed": false,
+    "valid": false,
+    "score": true,
+    "unflagged_false_claim": false,
+    "recovered": false
+  }
+]

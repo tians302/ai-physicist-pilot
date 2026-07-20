@@ -1,0 +1,268 @@
+{
+  "generated_utc": "2026-07-20T00:29:57+00:00",
+  "n_pairs": 26,
+  "sensitivity": 1.0,
+  "selectivity": 1.0,
+  "rows": [
+    {
+      "kind": "callaway",
+      "corruption": "bad_fit",
+      "intended_gate": "goodness_of_fit",
+      "detected_by_intended": true,
+      "failed_gates": [
+        "goodness_of_fit"
+      ],
+      "collateral_gates": []
+    },
+    {
+      "kind": "callaway",
+      "corruption": "structured_residuals",
+      "intended_gate": "residual_structure",
+      "detected_by_intended": true,
+      "failed_gates": [
+        "residual_structure"
+      ],
+      "collateral_gates": []
+    },
+    {
+      "kind": "callaway",
+      "corruption": "missing_sigma",
+      "intended_gate": "uncertainties",
+      "detected_by_intended": true,
+      "failed_gates": [
+        "uncertainties"
+      ],
+      "collateral_gates": []
+    },
+    {
+      "kind": "callaway",
+      "corruption": "unstable_bootstrap",
+      "intended_gate": "bootstrap_stability",
+      "detected_by_intended": true,
+      "failed_gates": [
+        "bootstrap_stability"
+      ],
+      "collateral_gates": []
+    },
+    {
+      "kind": "callaway",
+      "corruption": "holdout_disagreement",
+      "intended_gate": "holdout_validation",
+      "detected_by_intended": true,
+      "failed_gates": [
+        "holdout_validation"
+      ],
+      "collateral_gates": []
+    },
+    {
+      "kind": "callaway",
+      "corruption": "nan_curve",
+      "intended_gate": "finite_values",
+      "detected_by_intended": true,
+      "failed_gates": [
+        "finite_values"
+      ],
+      "collateral_gates": []
+    },
+    {
+      "kind": "eos",
+      "corruption": "unit_slip",
+      "intended_gate": "magnitude_plausibility",
+      "detected_by_intended": true,
+      "failed_gates": [
+        "magnitude_plausibility"
+      ],
+      "collateral_gates": []
+    },
+    {
+      "kind": "eos",
+      "corruption": "edge_minimum",
+      "intended_gate": "minimum_interior",
+      "detected_by_intended": true,
+      "failed_gates": [
+        "minimum_interior"
+      ],
+      "collateral_gates": []
+    },
+    {
+      "kind": "eos",
+      "corruption": "poor_coverage",
+      "intended_gate": "volume_coverage",
+      "detected_by_intended": true,
+      "failed_gates": [
+        "volume_coverage"
+      ],
+      "collateral_gates": []
+    },
+    {
+      "kind": "eos",
+      "corruption": "noisy_fit",
+      "intended_gate": "fit_residuals",
+      "detected_by_intended": true,
+      "failed_gates": [
+        "fit_residuals"
+      ],
+      "collateral_gates": []
+    },
+    {
+      "kind": "eos",
+      "corruption": "form_dependence",
+      "intended_gate": "fit_form_sensitivity",
+      "detected_by_intended": true,
+      "failed_gates": [
+        "fit_form_sensitivity"
+      ],
+      "collateral_gates": []
+    },
+    {
+      "kind": "elastic",
+      "corruption": "unit_slip",
+      "intended_gate": "magnitude_plausibility",
+      "detected_by_intended": true,
+      "failed_gates": [
+        "magnitude_plausibility"
+      ],
+      "collateral_gates": []
+    },
+    {
+      "kind": "elastic",
+      "corruption": "nonlinear",
+      "intended_gate": "linearity",
+      "detected_by_intended": true,
+      "failed_gates": [
+        "linearity"
+      ],
+      "collateral_gates": []
+    },
+    {
+      "kind": "elastic",
+      "corruption": "unconverged_reference",
+      "intended_gate": "reference_state_stress",
+      "detected_by_intended": true,
+      "failed_gates": [
+        "reference_state_stress"
+      ],
+      "collateral_gates": []
+    },
+    {
+      "kind": "elastic",
+      "corruption": "broken_symmetry",
+      "intended_gate": "tensor_symmetry",
+      "detected_by_intended": true,
+      "failed_gates": [
+        "tensor_symmetry"
+      ],
+      "collateral_gates": []
+    },
+    {
+      "kind": "elastic",
+      "corruption": "unstable",
+      "intended_gate": "mechanical_stability",
+      "detected_by_intended": true,
+      "failed_gates": [
+        "mechanical_stability"
+      ],
+      "collateral_gates": []
+    },
+    {
+      "kind": "elastic",
+      "corruption": "window_drift",
+      "intended_gate": "strain_window_stability",
+      "detected_by_intended": true,
+      "failed_gates": [
+        "strain_window_stability"
+      ],
+      "collateral_gates": []
+    },
+    {
+      "kind": "expansion",
+      "corruption": "unit_slip",
+      "intended_gate": "magnitude_plausibility",
+      "detected_by_intended": true,
+      "failed_gates": [
+        "magnitude_plausibility"
+      ],
+      "collateral_gates": []
+    },
+    {
+      "kind": "expansion",
+      "corruption": "unequilibrated",
+      "intended_gate": "equilibration",
+      "detected_by_intended": true,
+      "failed_gates": [
+        "equilibration"
+      ],
+      "collateral_gates": []
+    },
+    {
+      "kind": "expansion",
+      "corruption": "noisy",
+      "intended_gate": "fit_residuals",
+      "detected_by_intended": true,
+      "failed_gates": [
+        "fit_residuals"
+      ],
+      "collateral_gates": []
+    },
+    {
+      "kind": "diffusion",
+      "corruption": "unit_slip",
+      "intended_gate": "magnitude_plausibility",
+      "detected_by_intended": true,
+      "failed_gates": [
+        "magnitude_plausibility"
+      ],
+      "collateral_gates": []
+    },
+    {
+      "kind": "diffusion",
+      "corruption": "subdiffusive",
+      "intended_gate": "diffusive_regime",
+      "detected_by_intended": true,
+      "failed_gates": [
+        "diffusive_regime"
+      ],
+      "collateral_gates": []
+    },
+    {
+      "kind": "diffusion",
+      "corruption": "noisy_fit",
+      "intended_gate": "fit_residuals",
+      "detected_by_intended": true,
+      "failed_gates": [
+        "fit_residuals"
+      ],
+      "collateral_gates": []
+    },
+    {
+      "kind": "gk",
+      "corruption": "negative_component",
+      "intended_gate": "positive_components",
+      "detected_by_intended": true,
+      "failed_gates": [
+        "positive_components"
+      ],
+      "collateral_gates": []
+    },
+    {
+      "kind": "gk",
+      "corruption": "unconverged",
+      "intended_gate": "component_consistency",
+      "detected_by_intended": true,
+      "failed_gates": [
+        "component_consistency"
+      ],
+      "collateral_gates": []
+    },
+    {
+      "kind": "gk",
+      "corruption": "unit_slip",
+      "intended_gate": "magnitude_plausibility",
+      "detected_by_intended": true,
+      "failed_gates": [
+        "magnitude_plausibility"
+      ],
+      "collateral_gates": []
+    }
+  ]
+}

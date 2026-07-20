@@ -1,0 +1,62 @@
+[
+  {
+    "seed": 0,
+    "corruption": null,
+    "status": "completed",
+    "gate_passed": true,
+    "valid": true,
+    "score": true,
+    "unflagged_false_claim": false,
+    "recovered": true
+  },
+  {
+    "seed": 1,
+    "corruption": null,
+    "status": "completed",
+    "gate_passed": true,
+    "valid": true,
+    "score": true,
+    "unflagged_false_claim": false,
+    "recovered": true
+  },
+  {
+    "seed": 2,
+    "corruption": null,
+    "status": "completed",
+    "gate_passed": true,
+    "valid": true,
+    "score": true,
+    "unflagged_false_claim": false,
+    "recovered": true
+  },
+  {
+    "seed": 3,
+    "corruption": null,
+    "status": "completed",
+    "gate_passed": true,
+    "valid": true,
+    "score": true,
+    "unflagged_false_claim": false,
+    "recovered": true
+  },
+  {
+    "seed": 4,
+    "corruption": null,
+    "status": "completed",
+    "gate_passed": true,
+    "valid": true,
+    "score": true,
+    "unflagged_false_claim": false,
+    "recovered": true
+  },
+  {
+    "seed": 5,
+    "corruption": null,
+    "status": "completed",
+    "gate_passed": true,
+    "valid": true,
+    "score": true,
+    "unflagged_false_claim": false,
+    "recovered": true
+  }
+]
